@@ -1,0 +1,97 @@
+<?php
+
+if (!isset($_GET['upn']) || ($_GET['upn'])=="") {	echo "<h1 class='text-danger'>Invalid UPN.</h1>"; }
+else  {
+	$upn = $_GET['upn'];
+
+	echo "<h3>$upn@ad.tbwagroup.be</h3>";
+
+	// Connecting to LDAP (port : 389)
+	$ldapconn = ldap_connect($server) or die("Could not connect to dc");
+	if ($ldapconn) {
+		// binding anonymously
+		$ldapbind = ldap_bind($ldapconn, $user, $pass);
+
+		if ($ldapbind)
+		{
+			//**********************************************************************************************
+			//**********************************************************************************************
+			// LDAP QUERIES
+		
+			$dn      = $dnServer;
+			$attr    = array ('givenName', 'sn', 'userPrincipalName');
+			
+			
+			// checking upn
+			$filter  = "(userPrincipalName=$upn@ad.tbwagroup.be)"; // first and lastname check
+			$sr      = ldap_search($ldapconn, $dn, $filter, $attr);
+			$entries = ldap_get_entries($ldapconn,$sr);
+			
+			// checking if the account is disabled
+			$filterDisabled  = "(&(userPrincipalName=$upn@ad.tbwagroup.be)(userAccountControl:1.2.840.113556.1.4.803:=2))";//disabled account
+			$srDisabled   = ldap_search($ldapconn, $dn, $filterDisabled);
+			$DisabledEntry = ldap_get_entries($ldapconn,$srDisabled);
+			
+			//**********************************************************************************************
+			//**********************************************************************************************
+			// Checking fields of the user
+			if ($DisabledEntry["count"] == 1 ) { 
+				$disable = 1;
+				$img = "DOWN";
+				echo "<p class='text-danger'><strong>Account desactivated</strong></p>";
+			}
+			else
+			{
+				$disable = 0;
+				$img = "OK";
+			}
+			//**********************************************************************************************
+			//**********************************************************************************************
+			
+			// checking if the upn is on AD
+			if ($entries["count"] == 0) { echo "<h1 class='text-danger'>UPN not found in AD.</h1>"; }
+			else {
+							
+				echo "
+				<table class='table table-condensed'>
+					<th><span class='caret'></span></th>
+					<th>User name</th>
+					<th>OU</th>
+				";
+				
+				foreach($entries as $entry)
+				{
+					$cn=ldap_explode_dn($entry["dn"], 1); 
+					
+					// bypass error "Undefined offset: 0" by testing the array fields before print them
+					if (isset($cn[0])) 
+					{ 
+					print_r($cn);
+						//echo $cn[0]; // array content
+						$computer = $cn[0]; // convert the array on a string
+						echo "
+							<tr class='hover'>
+								<td>
+									<img src='img/comp$img.png' alt='In AD' title='Computer present in AD'/>
+								</td>
+								<td>
+									<a href='index.php?p=manAcc&upn=$upn' >$computer</a>
+								</td>
+								<td class='ouTab'>";
+									showOU (10, $cn);
+						echo "</td>
+							</tr>";
+					}
+				}
+				echo "</table>";
+			}
+		}
+		else {
+			echo "LDAP bind failed...";
+		}
+	}
+
+	ldap_close ($ldapconn);
+
+} // END IF isset $_GET['upn'];
+?>

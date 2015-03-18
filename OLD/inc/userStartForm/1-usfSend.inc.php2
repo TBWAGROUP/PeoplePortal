@@ -1,0 +1,136 @@
+<?php
+/** 
+		VALIDATIONSTAGE = 1 (HR Approver)
+**/
+
+
+// fields variables association
+	require ("inc/userStartForm/fields.inc.php");
+	
+		// associate ID <-> NAME
+			$idLabQuery = mysql_query("SELECT idLab FROM labels WHERE labelName = \"$label\" ");
+		$idLab = array_shift(mysql_fetch_array($idLabQuery));
+		
+			$idDepQuery = mysql_query("SELECT idDep FROM departments WHERE nameDepartment = \"$department\" ");
+		$idDep = array_shift(mysql_fetch_array($idDepQuery));
+		
+			$idFuncQuery = mysql_query("SELECT idFunc FROM functions WHERE functionName = \"$function\" ");
+		$idFunc = array_shift(mysql_fetch_array($idFuncQuery));
+	
+	$idE = $_POST['idE'];
+	$idCon = $_POST['idCon'];
+
+	
+	$ppConAddDate = date ("d/m/Y H:i");
+	// $sam = genSAMAD($firstname, $lastname);
+
+	echo $fileServer;
+	
+					// contract creation
+			mysql_query("UPDATE contracts SET 
+							validationStage = 2, idE = $idE, idFunc=\"$idFunc\", idDep=\"$idDep\", idLab=\"$idLab\", startDate=\"$startDate\", endDate=\"$endDate\", 
+							startDateTS=\"$startDateTS\", endDateTS=\"$endDateTS\",
+							timeRegime=\"$timeRegime\", primaryEmail= \"$primaryEmail\", empType=\"$empType\", internalPhone=\"$internalPhone\", fileServer=\"$fileServer\", vpn=\"$vpn\", timesheets=\"$timesheets\", 
+							timesheetblocking= \"$timeSheetBlocking\", workstation=\"$workstation\", 3gData=\"$_3Gdata\", financeJobCost=\"$financeJobCost\", financePurchaseOrders=\"$financePurchaseOrders\",
+							financePayroll=\"$financePayroll\", financeAccountsPayable=\"$financeAccountsPayable\", financeInvoicing=\"$financeInvoicing\", financeAccountReceivable=\"$financeAccountReceivable\",
+							financeGeneralLedger= \"$financeGeneralLedger\",financeFixedAssets= \"$financeFixedAssets\", financeHR=\"$financeHR\", maconomy = \"$maconomy\",
+							itComputerAdmin=\"$itComputerAdmin\", itNetworkAdmin=\"$itNetworkAdmin\", businessCard = \"$businessCard\", note = \"$note\", financePayrollAccess = \"$financePayrollAccess\", 
+							kensingtonLockNr=\"$kensingtonLockNr\", mobilePhoneModel = \"$mobilePhoneModel\", badgeNr = \"$badgeNr\", createdFb = \"$createdFb\", maconomy=\"$maconomy\"
+						WHERE idCon = \"$idCon\"
+											") or die(mysql_error());
+											
+											
+											
+		mysql_query ("UPDATE emailAliasesEmp SET emailAlEmpDelete = 1 WHERE idCon = $idCon")or die (mysql_error());
+		
+		// adding email aliases
+		if (!empty($_POST['emailAliases']))
+		{
+			foreach($_POST['emailAliases'] as $checkEmailAliases) 
+			{
+				$queryEmailAliasesEmp = mysql_query("SELECT * FROM emailAliasesEmp WHERE idAliase = \"$checkEmailAliases\" AND idCon = \"$idCon\" ") or die(mysql_error()) ;
+				if (mysql_num_rows($queryEmailAliasesEmp) == 0)
+				{
+					mysql_query ("INSERT INTO emailAliasesEmp (idCon, idAliase) VALUES (\"$idCon\", \"$checkEmailAliases\")") or die(mysql_error());
+				}
+				else
+				{
+					mysql_query ("UPDATE emailAliasesEmp SET emailAlEmpDelete = 0 WHERE idAliase = \"$checkEmailAliases\" AND idCon = \"$idCon\" ")or die (mysql_error());
+				}
+			}
+		}
+		mysql_query ("DELETE FROM emailAliasesEmp WHERE emailAlEmpDelete = 1 AND idCon = $idCon")or die (mysql_error());
+
+				
+				
+				
+				
+		/**	Mail Distribution list Group		**/
+
+	mysql_query("UPDATE employeeGroup SET empGroupDelete = 1 WHERE idE = $idE;");	
+	
+		if (!empty($_POST['group']))
+		{
+			foreach($_POST['group'] as $check) 
+			{
+				//echo "check : ".$check."<br />";
+				$checkGroup = mysql_query ("SELECT * FROM employeeGroup WHERE idE = $idE AND idGroup = $check") or die (mysql_error());
+				if (mysql_num_rows($checkGroup) == 0)
+				{
+					mysql_query("INSERT INTO employeeGroup (idE, idGroup) VALUES($idE, $check)") or die (mysql_error()); // and recreate them here
+					//echo $add++;
+				}
+				else
+				{
+					// si le groupe est déjà associé, repasser groupStatut à 0
+					mysql_query("UPDATE employeeGroup SET empGroupDelete = 0 WHERE idE = $idE AND idGroup = $check;");
+				}
+			}
+		}
+		mysql_query("DELETE FROM employeeGroup WHERE idE = $idE AND empGroupDelete = 1");
+
+
+			
+			
+		// adding teamleads
+		mysql_query("UPDATE teamLeads SET teamLeadDelete = 0 WHERE contracts_idCon = $idCon AND appType=0;");
+
+	
+		// adding holiday app
+		mysql_query("UPDATE teamLeads SET teamLeadDelete = 1 WHERE contracts_idCon = $idCon AND appType = 1;");
+		if (!empty($_POST['holidayApp']))
+		{
+			foreach($_POST['holidayApp'] as $checkTL) 
+			{
+				//echo "check : ".$check."<br />";
+				$checkGroup = mysql_query ("SELECT * FROM teamLead WHERE contracts_idCon = $idCon") or die (mysql_error());
+				if (mysql_num_rows($checkGroup) == 0)
+				{
+					mysql_query("INSERT INTO teamLeads (employees_idE, contracts_idCon, appType) VALUES($checkTL, $idCon, 1)") or die (mysql_error()); // and recreate them here
+					//echo $add++;
+				}
+				else
+				{
+					// si le groupe est déjà associé, repasser groupStatut à 0
+					mysql_query("UPDATE teamLeads SET teamLeadDelete = 0 WHERE contracts_idCon = $idCon AND appType=1;");
+				}
+			}
+		}
+		mysql_query("DELETE FROM teamLead WHERE idCon = $idCon AND teamLeadDelete = 1 AND appType=1");
+	
+
+	
+	
+	/** ADD TO GOOGLE CALENDAR OF PEOPLE PORTAL **/
+	$userName = $firstname." ".$lastname;
+	if ($startDate!= "") { addGcal ($startDate, $userName, 0); }
+	if ($endDate != "") { addGcal ($endDate, $userName, 1); }
+	
+	// /** SEND EMAIL ALERT TO PROVISIONING SERVICES HERE **/
+	// require($_SERVER['DOCUMENT_ROOT']."/class/PHPMailer/class.phpmailer.php");
+	// require($_SERVER['DOCUMENT_ROOT']."/inc/userStartForm/mailNotifications/mail.requestor.php");
+	// require($_SERVER['DOCUMENT_ROOT']."/inc/userStartForm/mailNotifications/mail.provisioning.all.php");	
+
+	echo "<img src='img/ajax-loader.gif' /> Request Approved. Redirecting...<meta http-equiv='refresh' content='2;url=index.php'>";			
+		
+?>

@@ -1,0 +1,204 @@
+body {
+	font-size:13px;
+  padding-top: 50px;
+  background-color:#f4f6f6;
+}
+.starter-template {
+	margin-top:40px;
+	padding: 40px 15px;
+	padding-top:20px;
+	/**text-align: center**/
+	border:1px solid #c6c6c6;
+	border-radius:15px;
+	background-color:#fff;
+}
+
+
+.employeeList
+{
+	width:90%;
+	margin:auto;
+	margin-top:40px;
+	padding: 40px 15px;
+	padding-top:20px;
+	border:1px solid #c6c6c6;
+	border-radius:15px;
+	background-color:#fff;
+
+}
+
+
+.hover:hover 
+{
+	background-color:#eeeeee;
+	/**background-color:#e6f4f8;**/
+}
+
+
+.menuHeader
+{	
+	/**width:1000px;**/
+	padding-top:0px;
+	width:1200px;
+} 
+
+.menuHeader a
+{
+	opacity:1;
+	color: #d3d3d3;
+	display:inline-block;
+	margin-right:5px;
+	height:50px;
+	
+	padding:10px;
+	
+	/**background-image:url("navbar4.png");**/
+}
+.menuHeader:hover
+{
+	opacity:1;
+}
+
+.menuHeader a:hover
+{
+	background-color:#454545;
+	border-radius:15px;
+	border-top-left-radius:0px;
+	border-top-right-radius:0px;
+	font-weight:normal;
+	opacity:0.8;
+	text-decoration:none;
+}
+
+.text_bar
+{
+	color:#fff;
+	margin-top:15px;
+	margin-left:15px;
+}
+
+.tableEmp, .tableEmp tr, .tableEmp td, .tableEmp th
+{
+	border:1px solid #ccc;
+	padding:3px;
+}
+.tableEmp th
+{
+	background-color:#f6f6f6;
+}
+
+.tableEmp2
+{
+	width:500px;
+	margin:auto;
+}
+.tableEmpNext, .tableEmpNext a
+{
+	font-size:12px;
+	color:#919191;
+}
+.scroll
+{
+	position:relative;
+	border:1px solid #ccc;
+	overflow:scroll;
+	width:100%;
+}
+.scrollGroup
+{
+	border:1px solid #ccc;
+	overflow:scroll;
+	height:400px;
+	padding:10px;
+}
+td
+{
+	text-align:left;
+}
+
+table a
+{
+	color:#2f2f2f;
+}
+
+.toActivate
+{
+	background-color:#ccc;
+}
+
+.userStartForm table, .userStartForm tr, .userStartForm td, .userStartForm th
+{
+	font-size:13px;
+	margin:auto;
+	border:1px solid #ccc;
+	padding:5px;
+	padding-right:10px;
+}
+.userStartForm th
+{
+	width:180px;
+	text-align:right;
+}
+.userStartForm td
+{
+	width:150px;
+}
+.userStartForm label
+{
+	font-weight:normal;
+}
+.userStartForm input, .userStartForm textarea
+{
+	/**width:100%;**/
+}
+
+.floatLeft
+{
+	float:left;
+}
+
+.title
+{
+	background-color:#e3e3e3;
+	text-align:center;
+}
+
+
+.readOnlyField
+{
+	background-color:#ececec;
+}
+
+.float{
+		float:left;
+		margin-left:100px;
+}
+
+.groupListLab
+{
+	font-size:12px;
+}
+
+.infoCreated
+{
+	width:250px;
+	height:40px;
+	padding-top:10px;
+	border-radius:5px;
+}	
+
+
+
+.usf:hover
+{
+	background-color: #e61a40;
+	border:#4b4746;
+	color:#fffeff;
+}
+.usf
+{
+	background-color: #4b4746;
+	border:#c41f41;
+	color:#fffeff;
+}
+

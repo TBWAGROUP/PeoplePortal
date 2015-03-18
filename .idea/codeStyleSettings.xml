@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <option name="OTHER_INDENT_OPTIONS">
+          <value>
+            <option name="INDENT_SIZE" value="4" />
+            <option name="CONTINUATION_INDENT_SIZE" value="8" />
+            <option name="TAB_SIZE" value="4" />
+            <option name="USE_TAB_CHARACTER" value="true" />
+            <option name="SMART_TABS" value="false" />
+            <option name="LABEL_INDENT_SIZE" value="0" />
+            <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+            <option name="USE_RELATIVE_INDENTS" value="false" />
+          </value>
+        </option>
+        <option name="HTML_ATTRIBUTE_WRAP" value="0" />
+        <option name="HTML_TEXT_WRAP" value="0" />
+        <option name="HTML_KEEP_LINE_BREAKS" value="false" />
+        <option name="HTML_KEEP_BLANK_LINES" value="1" />
+        <option name="HTML_ALIGN_ATTRIBUTES" value="false" />
+        <option name="HTML_ELEMENTS_TO_INSERT_NEW_LINE_BEFORE" value="body,div,form,h1,h2,h3,p" />
+        <option name="HTML_KEEP_WHITESPACES_INSIDE" value="" />
+        <CssCodeStyleSettings>
+          <option name="KEEP_SINGLE_LINE_BLOCKS" value="true" />
+        </CssCodeStyleSettings>
+        <PHPCodeStyleSettings>
+          <option name="INDENT_CODE_IN_PHP_TAGS" value="true" />
+          <option name="ALIGN_PHPDOC_PARAM_NAMES" value="true" />
+          <option name="PHPDOC_KEEP_BLANK_LINES" value="false" />
+          <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
+          <option name="UPPER_CASE_BOOLEAN_CONST" value="true" />
+          <option name="UPPER_CASE_NULL_CONST" value="true" />
+        </PHPCodeStyleSettings>
+        <SqlCodeStyleSettings>
+          <option name="NEW_LINE_BEFORE_JOIN_CONDITION" value="true" />
+          <option name="NEW_LINE_BEFORE_COMMA" value="true" />
+        </SqlCodeStyleSettings>
+        <XML>
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
+        <codeStyleSettings language="CSS">
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+        <codeStyleSettings language="HTML">
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+        <codeStyleSettings language="PHP">
+          <option name="LINE_COMMENT_AT_FIRST_COLUMN" value="false" />
+          <option name="KEEP_FIRST_COLUMN_COMMENT" value="false" />
+          <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="0" />
+          <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+          <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
+          <option name="SPECIAL_ELSE_IF_TREATMENT" value="true" />
+          <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+          <option name="IF_BRACE_FORCE" value="3" />
+          <option name="WHILE_BRACE_FORCE" value="3" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+        <codeStyleSettings language="SQL">
+          <option name="SPACE_WITHIN_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
+          <option name="SPACE_WITHIN_METHOD_PARENTHESES" value="true" />
+          <option name="SPACE_BEFORE_METHOD_CALL_PARENTHESES" value="true" />
+          <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
+          <indentOptions>
+            <option name="USE_TAB_CHARACTER" value="true" />
+          </indentOptions>
+        </codeStyleSettings>
+      </value>
+    </option>
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+  </component>
+</project>
+

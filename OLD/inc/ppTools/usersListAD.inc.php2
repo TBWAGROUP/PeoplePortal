@@ -1,0 +1,69 @@
+<?php
+if (memberOf($pp_admin)) {
+
+
+$upn = $_GET['upn'];
+// Connecting to LDAP (port : 389)
+$ldapconn = ldap_connect($server) or die("Could not connect to dc");
+if ($ldapconn) {
+    // binding anonymously
+    $ldapbind = ldap_bind($ldapconn, $user, $pass);
+
+    if ($ldapbind)
+	{
+		$dn      = $dnServer;
+
+		// remove the user from these groups :
+		$removeFromGroup = mysql_query ("SELECT * FROM employeeGroup AS empG INNER JOIN groups AS groups ON empG.idGroup = groups.idGroup WHERE empG.idE = $idE AND empG.empGroupDelete = 1") or die (mysql_error());
+		while($group=mysql_fetch_array($removeFromGroup)) 
+		{
+			$groupName = $group['groupName'];
+
+				$groupNameDN  = "CN=$groupName,OU=Groups,$dn"; // only enabled users
+				$userDN = getDN($ldapconn, $upn, $dn);
+				if (checkGroup($ldapconn, $dn, $groupNameDN) ) // check if the user is on the group
+				{
+					$group_info['member'] = $userDN; // User's DN is added to group's 'member' array
+					ldap_mod_del($ldapconn,$groupNameDN,$group_info);
+					echo "Removed from ".$groupName."<br />"; 
+				}
+				else 
+				{ 
+					echo "This user wasn't in the group ".$groupName." on the AD. This relation has ben deleted from the PP database.";
+				}
+		}
+		$addToGroup = mysql_query ("SELECT * FROM employeeGroup AS empG INNER JOIN groups AS groups ON empG.idGroup = groups.idGroup WHERE empG.idE = $idE AND empG.empGroupDelete = 2") or die (mysql_error());
+		while($group=mysql_fetch_array($addToGroup)) 
+		{
+				$groupName = $group['groupName'];
+				$groupNameDN  = "CN=$groupName,OU=Groups,$dn";
+				$userDN = getDN($ldapconn, $upn, $dn);
+
+				// if not member in the AD, add him to the group on the AD
+				if (checkGroup($ldapconn, $dn, $groupNameDN) ) // check if the user is on the group
+				{
+					$group_info['member'] = $userDN; // User's DN is added to group's 'member' array
+					ldap_mod_add($ldapconn,$groupNameDN,$group_info);
+					echo "Added in : ".$groupName."<br />";	
+				}
+				else 
+				{ 
+					echo "This user was already in the group ".$groupName." on the AD. The PP database was updated.";
+				}
+		}
+		
+		// add this user to these groups :
+
+	}
+	else {
+        echo "LDAP bind failed...";
+    }
+}
+
+ldap_close ($ldapconn);
+
+echo "<br />AD update Done";
+
+} // end if memberOf pp_admin
+
+?>

@@ -1,0 +1,51 @@
+<option value="">Choose one</option>
+<?php
+
+
+
+	// Connecting to LDAP (port : 389)
+	$ldapconn = ldap_connect($server) or die("Could not connect to dc");
+	if ($ldapconn) {
+		// binding anonymously
+		$ldapbind = ldap_bind($ldapconn, $user, $pass);
+
+		if ($ldapbind)
+		{
+			//**********************************************************************************************
+			//**********************************************************************************************
+			// LDAP QUERIES
+		
+			$dn      = $dnServer;
+			
+			
+			// checking upn
+			if ($label =="") { $filter  = "(&(objectCategory=organizationalUnit)(name=0303*))";} // if no label, show all OU
+			else {
+				$filter  = "(&(&(objectCategory=organizationalUnit)(name=*$label*)(name=0303*)))"; // list all OU who contain $label and starting with "0303"
+			}
+			$sr      = ldap_search($ldapconn, $dn, $filter);
+			$entries = ldap_get_entries($ldapconn,$sr);
+			foreach($entries as $entry)
+				{
+					$cn=ldap_explode_dn($entry["dn"], 1); 
+					
+					// bypass error "Undefined offset: 0" by testing the array fields before print them
+					if (isset($cn[0])) 
+					{ 
+						$computer = $cn[0]; // convert the array on a string
+						$ou = addToOU(5, $cn);
+						//echo "<option value='".$ou."'>". $cn[0]."</option>";
+						echo "<option value='"; addToOU(10, $cn); echo "'>". $cn[0]."</option>";
+						//echo showOU(10, $cn)."<br />";
+					}
+				}
+		}
+		else {
+			echo "LDAP bind failed...";
+		
+		}
+
+	ldap_close ($ldapconn);
+
+} // END IF isset $_GET['upn'];
+?>

@@ -1,0 +1,97 @@
+<?php
+	$idE = $_GET['idE'];
+	$idCon = $_GET['idCon'];
+	$upn = $_GET['upn'];
+ if(isset($_GET["up"]))
+{
+	$add=0;
+	$del=0;
+	
+	
+	/**
+	
+		empGroupDelete =  0 : default, relation group existing and wasn't changed
+		empGroupDelete =  1 : relation group unchecked and ready for delete
+		empGroupDelete =  2 : new relation group checked and ready for adding
+								
+	**/
+	
+	
+	
+	if (!empty($_POST['group']))
+	{
+		foreach($_POST['group'] as $check) 
+		{
+				mysql_query("INSERT INTO accessRequest (idE, idGroup, requestor_idE) VALUES($idE, $check, $currentIdE)") or die (mysql_error()); // and recreate them here
+		}
+	}
+	
+	if(!empty($_POST['group2'])) 
+	{
+		foreach($_POST['group2'] as $check2) 
+		{
+					mysql_query("INSERT INTO accessRequest (idE, idGroup, requestor_idE) VALUES($idE, $check, $currentIdE)") or die (mysql_error()); // and recreate them here
+		}
+	}
+		echo "<h3 class='text-success'>Request correctly updated</h3>";
+		
+		echo "<meta http-equiv='refresh' content='0;url=index.php?p=emp&idE=$idE&idCon=$idCon&upn=$upn'>";
+
+}
+?>
+<script>
+	$(document).ready(function(){
+		$(".syncMess").hide();
+		$(".sync").click(function()
+		{
+			$(".syncMess").show();
+			$(".syncBtn").hide();
+		});
+	});
+</script>
+
+<center>
+<h3>Access request for <?php echo $_GET['upn']; ?></h3>
+<span class="syncMess">
+	<p align="center" class="text-default"><br /><strong><img src="img/ajax-loader.gif" /> Sending request...</strong></p></span>
+</span>
+
+
+            <form method="POST" action='index.php?p=accessRequest&idE=<?php echo $idE; ?>&idCon=<?php echo $idCon; ?>&up&upn=<?php echo $upn; ?>' name="gm">
+                <table class="table table-condensed">
+                    <tr>
+                            <th>Member of</th>
+                            <th>All Groups</th>
+                    </tr>
+                    <tr>
+                        <td>
+                                <?php 
+                                // member of
+                                $queryEmpGroups = mysql_query("SELECT * FROM employeeGroup AS eg INNER JOIN groups AS groups ON groups.idGroup = eg.idGroup WHERE eg.idE = $idE ORDER BY groupName ASC") or die(mysql_error()); 
+                                $nbrGroups = mysql_num_rows($queryEmpGroups);
+                                while($group=mysql_fetch_array($queryEmpGroups)) { 
+                                $idGroup = $group['idGroup'];
+                                ?>
+                                    <label class="groupListLab">
+                                        <input type="checkbox" name="group[]" value="<?php echo $group['idGroup']; ?>" checked /> <?php echo $group['groupName']; ?>
+                                    </label><br />
+                                <?php } ?>
+                        </td>
+                        <td><div class="scrollGroup">
+                                <?php 
+                                // other groups
+                                if ($nbrGroups > 0) {
+									$queryEmpGroups2 = mysql_query("SELECT * FROM groups  ORDER BY groupName ASC") or die(mysql_error());
+                                } else { $queryEmpGroups2 = mysql_query("SELECT * FROM groups") or die(mysql_error()); }
+                                while($group2=mysql_fetch_array($queryEmpGroups2)) {
+                                ?>
+                                    <label class="groupListLab">
+                                        <input type="checkbox" name="group2[]" value="<?php echo $group2['idGroup']; ?>" > <?php echo $group2['groupName']; ?>
+                                    </label><br />
+                                <?php } ?>
+                                </div>
+                        </td>
+                    </tr>
+                </table>
+            <p><br /><button class='btn btn-success sync syncBtn' ><img src='img/okWht.png' /> Send Request</button></p>
+            </form>

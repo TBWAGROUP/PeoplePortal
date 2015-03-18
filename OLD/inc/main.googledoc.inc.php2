@@ -1,0 +1,175 @@
+<?php
+
+$todayDate = date("j/n/Y");
+
+echo "<h4><img src='img/clock24x24.png' /> Today date : ".$todayDate."</h4><hr />";
+echo "<h3 class='text-success'>Near activation date</h3>";
+
+// call the Zend Gdata library
+require_once 'Zend/Loader.php';
+Zend_Loader::loadClass('Zend_Http_Client');
+Zend_Loader::loadClass('Zend_Gdata');
+Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
+Zend_Loader::loadClass('Zend_Gdata_Spreadsheets');
+Zend_Loader::loadClass('Zend_Gdata_Docs');
+
+
+// Authenticate to Google docs
+$authService = Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME;
+$httpClient = Zend_Gdata_ClientLogin::getHttpClient($emailGdata, $pass, $authService);
+$spreadSheetService = new Zend_Gdata_Spreadsheets($httpClient);
+
+
+
+// ****************----------------------------------------------
+// cols needed to display
+$colsNeed = 4; // can't be changed :/
+
+//  Get column information
+$query = new Zend_Gdata_Spreadsheets_CellQuery();
+$query->setSpreadsheetKey($employeeList);
+$query->setMaxCol($colsNeed); // number of needed columns
+$query->setReturnEmpty(true); // return empty fields
+
+$feed = $spreadSheetService->getCellFeed($query);
+
+$columnCount = $feed->getColumnCount()->getText();
+$rowCount = $feed->getRowCount()->getText();
+
+// calc the $z value needed in function of the number of columns
+$colsNeedShow = $columnCount - $colsNeed;
+$colsNeedShow = $columnCount - $colsNeedShow;
+
+$columns = array();
+
+
+/**
+echo $rowCount." rows. "; // 141
+echo $columnCount ." columns - ".$colsNeed." displayed<BR/>"; // 71
+**/
+
+// generating the table.
+// First line : Headers
+echo "<table class='table table-condensed tableEmp'>";
+echo "<tr>";
+for ($x = 0; $x < $colsNeed; $x++) 
+{
+		$rowName = $feed->entries[$x]->getCell()->getText();
+		echo "<th>".$rowName."</th>";
+}
+echo "</tr>";
+
+//  initialising $z
+$z = $colsNeedShow; // start at the first data row. Skip the first line (headers)
+$z2 = $colsNeed+($colsNeed-1); // the start date field for the current row
+
+$toActivate = 0;
+
+// Generating the rest of the table : the data rows
+for ($y = 1; $y < $rowCount; $y++) 
+{
+	echo "<tr class='hover'>";
+		for ($x=0; $x < $colsNeed; $x++)
+		{
+				$entry = $feed->entries[$z]->getCell()->getText();
+				if ($z == $z2)
+				{
+					// how many days before the start date?
+					// 1 day = 86 400 seconds
+					$startDateBef =  time() - 259200; // 3 days after the start date
+					$startDateAft =  time() + 518400; // 7 days before the start date
+					$startDate = str_replace("/", "-", $entry);
+					$startDate1 = strtotime($startDate);
+					
+					$z1 = $z - ($colsNeed-1);
+					for ($z1; $z1 <= $z; $z1++)
+					{
+						//echo $startDate;
+						if (($startDate1 >= $startDateBef) && ($startDate1 <= $startDateAft)) 
+						{
+								$entry = $feed->entries[$z1]->getCell()->getText();
+								echo "<td>";	
+										echo "<a href=index.php?p=showEmp&id=".$y.">".$entry."</a>"; // &addToAD=1
+									//echo " | z : ".$z. " | z2 : ".$z2;
+								echo"</td>";
+										//echo "<td> x : ".$x. "<br /> y : ".$y."<br /> z : ".$z."<br /> z2 : ".$z2."</td>"; // for debug
+								$toActivate++;
+						}
+					}
+					$z2 = $z2+$colsNeed; // set the next date start field
+					$z++;
+				}
+				else
+				{
+					$z++;
+				}
+		}
+	echo "</tr>";
+}
+echo "</table>";
+
+
+
+
+echo "<hr />";
+// ***************************************************
+// Next to activate (all time)
+// First line : Headers
+echo "<h4>Next to activate</h4>";
+echo "<table class='table table-condensed tableEmpNext'>";
+echo "<tr>";
+for ($x = 0; $x < $colsNeed; $x++) 
+{
+		$rowName = $feed->entries[$x]->getCell()->getText();
+		echo "<th>".$rowName."</th>";
+}
+echo "</tr>";
+
+//  initialising $z
+$z = $colsNeedShow; // start at the first data row. Skip the first line (headers)
+$z2 = $colsNeed+($colsNeed-1); // the start date field for the current row
+
+$toActivate = 0;
+
+// Generating the rest of the table : the data rows
+for ($y = 1; $y < $rowCount; $y++) 
+{
+	echo "<tr class='hover'>";
+		for ($x=0; $x < $colsNeed; $x++)
+		{
+				$entry = $feed->entries[$z]->getCell()->getText();
+				if ($z == $z2)
+				{
+					// how many days before the start date?
+					// 1 day = 86 400 seconds
+					$startDateAft =  time() + 518400; // 7 days before the start date
+					$startDate = str_replace("/", "-", $entry);
+					$startDate1 = strtotime($startDate);
+					
+					$z1 = $z - ($colsNeed-1);
+					for ($z1; $z1 <= $z; $z1++)
+					{
+						//echo $startDate;
+						if ($startDate1 >= $startDateAft)
+						{
+								$entry = $feed->entries[$z1]->getCell()->getText();
+								echo "<td>";	
+										echo "<a href=index.php?p=showEmp&id=".$y.">".$entry."</a>"; // &addToAD=1
+									//echo " | z : ".$z. " | z2 : ".$z2;
+								echo"</td>";
+										//echo "<td> x : ".$x. "<br /> y : ".$y."<br /> z : ".$z."<br /> z2 : ".$z2."</td>"; // for debug
+								$toActivate++;
+						}
+					}
+					$z2 = $z2+$colsNeed; // set the next date start field
+					$z++;
+				}
+				else
+				{
+					$z++;
+				}
+		}
+	echo "</tr>";
+}
+echo "</table>";
+?>

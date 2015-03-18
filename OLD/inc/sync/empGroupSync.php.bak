@@ -1,0 +1,73 @@
+
+<?php
+	if (!isset($_GET['p'])) { require ($_SERVER['DOCUMENT_ROOT']."/bdd/connect.inc.php"); require ($_SERVER['DOCUMENT_ROOT']."/bdd/adConnect.inc.php");}
+	if (!isset($_GET['p'])) {  }
+	if (!isset($_GET['p'])) { require ($_SERVER['DOCUMENT_ROOT']."/functions.php"); }
+	$updated=0;
+	$inserted=0;
+
+		// Connecting to LDAP (port : 389)
+		$ldapconn = ldap_connect($server) or die("Could not connect to dc");
+		if ($ldapconn) 
+		{
+			// binding anonymously
+			$ldapbind = ldap_bind($ldapconn, $user, $pass);
+			
+				if ($ldapbind)
+				{
+					$groupQuery = mysql_query("SELECT * FROM groups ORDER BY groupName") or die(mysql_error());
+					while($group=mysql_fetch_array($groupQuery))
+					{
+						$groupName = $group['groupName'];
+						$idGroup = $group['idGroup'];
+						
+						$dn      = $dnServer;
+						$filter  = "(memberOf=CN=$groupName,OU=Groups,$dn)";
+						$sr      = ldap_search($ldapconn, $dn, $filter);
+						$entries = ldap_get_entries($ldapconn,$sr);
+											
+						foreach($entries as $entry)
+						{
+							$cn=ldap_explode_dn($entry["dn"], 1); 
+							
+							// bypass error "Undefined offset: 0" by testing the array fields before print them
+							if (isset($cn[0])) 
+							{
+								//echo $cn[0]; // array content
+								$cn[0]; // convert the array on a string	
+								
+								$upn = genUpnCN($cn[0]);
+								$queryUser = mysql_query("SELECT idE, upn FROM employees WHERE upn = \"$upn\" ") or die(mysql_error());
+								
+								if (mysql_num_rows($queryUser) == 1)
+								{
+									$user=mysql_fetch_array($queryUser); 
+									$idE = $user['idE'];
+									$querycheckGroup = mysql_query("SELECT * FROM employeeGroup WHERE idE = \"$idE\" AND idGroup = \"$idGroup\" ") or die(mysql_error());
+									if (mysql_num_rows($querycheckGroup) == 0)
+									{
+										mysql_query("INSERT INTO employeeGroup (idE, idGroup) VALUES (\"$idE\", \"$idGroup\" )") or die(mysql_error());
+										$inserted++;
+									}
+								}
+							}
+							
+						}
+					}// while
+				}
+				else 
+				{
+					echo "LDAP bind failed...";
+				}
+				
+			
+		}
+
+		ldap_close ($ldapconn);
+
+
+	
+	echo "<p>";
+	echo $inserted." user / group association <br /></strong>";
+	echo "</p>";
+?>

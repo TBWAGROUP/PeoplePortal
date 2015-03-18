@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - tbwagroup_people@10.173.0.34" uuid="eb79ad28-1431-48f6-ac2a-8aaba0923554">
+    <database-info product="MySQL" version="5.5.37-0ubuntu0.12.04.1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.31 ( Revision: alexander.soklakov@oracle.com-20140520065950-groqzzbvxprqdmnz )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="tbwagroup_people"/>
+    <table name="accessLog" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idaccessLog" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="ip" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="dateTime" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="dateTimeTS" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="statut" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="userTried" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idaccessLog"/>
+      <index name="idaccessLog_UNIQUE" unique="true" columns="idaccessLog"/>
+    </table>
+    <table name="accessRequest" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idAR" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="requestor_idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idAR,idGroup,requestor_idE"/>
+      <foreign-key name="fk_accessRequest_employees1" columns="requestor_idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_accessRequest_groups1" columns="idGroup" ref-table="groups" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idGroup" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_accessRequest_employees1_idx" unique="false" columns="requestor_idE"/>
+      <index name="fk_accessRequest_groups1_idx" unique="false" columns="idGroup"/>
+    </table>
+    <table name="approvals" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idApp" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="statut" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="approveDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="approveDateTS" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idApp,idGroup,idCon,idE"/>
+      <foreign-key name="fk_approvals_contracts1" columns="idCon" ref-table="contracts" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idCon" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_approvals_employees1" columns="idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_approvals_groups1" columns="idGroup" ref-table="groups" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idGroup" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_approvals_contracts1_idx" unique="false" columns="idCon"/>
+      <index name="fk_approvals_employees1_idx" unique="false" columns="idE"/>
+      <index name="fk_approvals_groups1_idx" unique="false" columns="idGroup"/>
+    </table>
+    <table name="contFileServers" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idCFS" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idServ" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="fileServDelete" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idCFS,idCon,idServ"/>
+      <foreign-key name="fk_contFileServer_contracts1" columns="idCon" ref-table="contracts" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idCon" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_contFileServer_fileServer1" columns="idServ" ref-table="fileServers" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idServ" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_contFileServer_contracts1_idx" unique="false" columns="idCon"/>
+      <index name="fk_contFileServer_fileServer1_idx" unique="false" columns="idServ"/>
+    </table>
+    <table name="contracts" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idFunc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idDep" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idLab" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="validationStage" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="requestor" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ppConAddDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="note" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="bio" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="startDate" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="startDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="endDate" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="endDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="operationalEndDate" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="operationalEndDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="disableAccountDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="disableAccountDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="materialReturnDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="materialReturnDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="mobilePhonePurchaseDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="mobilePhoneReturnDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="mobilePhoneReturnDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="carReturnDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="carReturnDateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="empType" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="financePayroll" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="primaryEmail" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="timeRegime" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="timeRegimeRmk" sqlType="LONGTEXT" precision="2147483647" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="businessCardNeeded" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="businessCardCreated" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="workstation" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="seating" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="badgeNr" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12" def="Jyc="/>
+      <column name="badgeAccessLevel" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="emailSignatureLogo" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="companyPhone" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="phoneNumber" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="internalPhone" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="fileserver" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="vpn" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="maconomy" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="createdInMaconomy" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="timesheets" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="timesheetblocking" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="checkMinHours" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeJobCost" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financePurchaseOrders" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeAccountsPayable" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeInvoicing" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeAccountReceivable" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeGeneralLedger" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeFixedAssets" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financeHR" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="financePayrollAccess" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="itComputerAdmin" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="itNetworkAdmin" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="essApprovers" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="essCreated" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="createdFb" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
+      <column name="mobilePhoneSub" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="mobilePhoneSubRmk" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="mobilePhoneModel" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="mobilePhoneOwner" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="3gData" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="kensingtonLockNr" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="softwareNeeded" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="softwareSpecialRequest" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="jobPortalRole" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="parkingRemarks" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="itOtherHardware" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TEST" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idCon,idE,idFunc,idDep,idLab"/>
+      <foreign-key name="fk_contracts_department1" columns="idDep" ref-table="departments" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idDep" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_contracts_employees1" columns="idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_contracts_function1" columns="idFunc" ref-table="functions" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idFunc" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_contracts_label1" columns="idLab" ref-table="labels" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idLab" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_approvals_contracts1" table="approvals" schema="" catalog="tbwagroup_people" columns="idCon"/>
+      <exported-key name="fk_contFileServer_contracts1" table="contFileServers" schema="" catalog="tbwagroup_people" columns="idCon"/>
+      <exported-key name="fk_emailAliasesEmp_contracts1" table="emailAliasesEmp" schema="" catalog="tbwagroup_people" columns="idCon"/>
+      <exported-key name="parking_ibfk_1" table="parking" schema="" catalog="tbwagroup_people" columns="contracts_idCon"/>
+      <exported-key name="fk_teamLead_contracts1" table="teamLeads" schema="" catalog="tbwagroup_people" columns="contracts_idCon"/>
+      <index name="idCon_UNIQUE" unique="true" columns="idCon"/>
+      <index name="fk_contracts_department1_idx" unique="false" columns="idDep"/>
+      <index name="fk_contracts_employees1_idx" unique="false" columns="idE"/>
+      <index name="fk_contracts_function1_idx" unique="false" columns="idFunc"/>
+      <index name="fk_contracts_label1_idx" unique="false" columns="idLab"/>
+    </table>
+    <table name="departments" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idDep" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="nameDepartment" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="hidden" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idDep"/>
+      <exported-key name="fk_contracts_department1" table="contracts" schema="" catalog="tbwagroup_people" columns="idDep"/>
+      <index name="idDep_UNIQUE" unique="true" columns="idDep"/>
+    </table>
+    <table name="emailAliases" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idAliase" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idLab" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="email" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="hidden" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idAliase,idLab"/>
+      <foreign-key name="fk_emailAliases_label1" columns="idLab" ref-table="labels" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idLab" update-rule="3" delete-rule="3" deferrability="2"/>
+      <exported-key name="fk_emailAliasesEmp_emailAliases1" table="emailAliasesEmp" schema="" catalog="tbwagroup_people" columns="idAliase"/>
+      <index name="idAliase_UNIQUE" unique="true" columns="idAliase"/>
+      <index name="fk_emailAliases_label1_idx" unique="false" columns="idLab"/>
+    </table>
+    <table name="emailAliasesEmp" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idEAE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idAliase" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="title" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="emailAlEmpDelete" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="businessCardNeeded" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="businessCardCreated" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6"/>
+      <primary-key name="PRIMARY" columns="idEAE,idAliase,idCon"/>
+      <foreign-key name="fk_emailAliasesEmp_contracts1" columns="idCon" ref-table="contracts" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idCon" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_emailAliasesEmp_emailAliases1" columns="idAliase" ref-table="emailAliases" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idAliase" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idEAE_UNIQUE" unique="true" columns="idEAE"/>
+      <index name="fk_emailAliasesEmp_contracts1_idx" unique="false" columns="idCon"/>
+      <index name="fk_emailAliasesEmp_emailAliases1_idx" unique="false" columns="idAliase"/>
+    </table>
+    <table name="emergencyContacts" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idIce" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="ICEname" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ICErelation" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ICEphoneNumber" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idIce,idE"/>
+      <foreign-key name="fk_emergencyContacts_employees1" columns="idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="fk_emergencyContacts_employees1_idx" unique="false" columns="idE"/>
+    </table>
+    <table name="empAccess" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idEA" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idSecAcc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idEA,idSecAcc,idE"/>
+      <foreign-key name="fk_empAccess_employees1" columns="idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_empAccess_securityAccess1" columns="idSecAcc" ref-table="securityAccess" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idSecAcc" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idEA_UNIQUE" unique="true" columns="idEA"/>
+      <index name="fk_empAccess_employees1_idx" unique="false" columns="idE"/>
+      <index name="fk_empAccess_securityAccess1_idx" unique="false" columns="idSecAcc"/>
+    </table>
+    <table name="employeeGroup" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idUG" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="empGroupDelete" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="TEST" sqlType="TEXT" precision="65535" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PRIMARY" columns="idUG,idE,idGroup"/>
+      <foreign-key name="fk_employeeGroup_employees1" columns="idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_employeeGroup_groups1" columns="idGroup" ref-table="groups" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idGroup" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idUG_UNIQUE" unique="true" columns="idUG"/>
+      <index name="fk_employeeGroup_employees1_idx" unique="false" columns="idE"/>
+      <index name="fk_employeeGroup_groups1_idx" unique="false" columns="idGroup"/>
+    </table>
+    <table name="employees" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="objectsid" sqlType="VARCHAR" precision="60" scale="0" nullable="true" jdbcType="12"/>
+      <column name="firstname" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="lastname" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="contract" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="language" sqlType="VARCHAR" precision="3" scale="0" nullable="true" jdbcType="12"/>
+      <column name="address" sqlType="MEDIUMTEXT" precision="16777215" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="addressPC" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addressCity" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="addressCountry" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="birthdate" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="birthdateTS" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="upn" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="mobile" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="contactEmergency" sqlType="MEDIUMTEXT" precision="16777215" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="ppAccountStatut" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="ppAddDate" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ppLastConnection" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="teamLead" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="holidayApp" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TEST" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idE,contract"/>
+      <exported-key name="fk_accessRequest_employees1" table="accessRequest" schema="" catalog="tbwagroup_people" columns="requestor_idE"/>
+      <exported-key name="fk_approvals_employees1" table="approvals" schema="" catalog="tbwagroup_people" columns="idE"/>
+      <exported-key name="fk_contracts_employees1" table="contracts" schema="" catalog="tbwagroup_people" columns="idE"/>
+      <exported-key name="fk_emergencyContacts_employees1" table="emergencyContacts" schema="" catalog="tbwagroup_people" columns="idE"/>
+      <exported-key name="fk_empAccess_employees1" table="empAccess" schema="" catalog="tbwagroup_people" columns="idE"/>
+      <exported-key name="fk_employeeGroup_employees1" table="employeeGroup" schema="" catalog="tbwagroup_people" columns="idE"/>
+      <exported-key name="fk_teamLead_employees1" table="teamLeads" schema="" catalog="tbwagroup_people" columns="employees_idE"/>
+      <index name="idE_UNIQUE" unique="true" columns="idE"/>
+    </table>
+    <table name="fileServers" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idServ" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="serverName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idServ"/>
+      <exported-key name="fk_contFileServer_fileServer1" table="contFileServers" schema="" catalog="tbwagroup_people" columns="idServ"/>
+      <index name="idServ_UNIQUE" unique="true" columns="idServ"/>
+    </table>
+    <table name="functionGroups" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idFG" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idFunc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idFG,idFunc,idGroup"/>
+      <foreign-key name="fk_functionGroup_function1" columns="idFunc" ref-table="functions" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idFunc" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_functionGroup_groups1" columns="idGroup" ref-table="groups" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idGroup" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idFG_UNIQUE" unique="true" columns="idFG"/>
+      <index name="fk_functionGroup_function1_idx" unique="false" columns="idFunc"/>
+      <index name="fk_functionGroup_groups1_idx" unique="false" columns="idGroup"/>
+    </table>
+    <table name="functions" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idFunc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="functionName" sqlType="VARCHAR" precision="60" scale="0" nullable="false" jdbcType="12"/>
+      <column name="functionTags" sqlType="MEDIUMTEXT" precision="16777215" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="hidden" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idFunc"/>
+      <exported-key name="fk_contracts_function1" table="contracts" schema="" catalog="tbwagroup_people" columns="idFunc"/>
+      <exported-key name="fk_functionGroup_function1" table="functionGroups" schema="" catalog="tbwagroup_people" columns="idFunc"/>
+      <index name="idFunc_UNIQUE" unique="true" columns="idFunc"/>
+    </table>
+    <table name="groups" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="groupName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idGroup"/>
+      <exported-key name="fk_accessRequest_groups1" table="accessRequest" schema="" catalog="tbwagroup_people" columns="idGroup"/>
+      <exported-key name="fk_approvals_groups1" table="approvals" schema="" catalog="tbwagroup_people" columns="idGroup"/>
+      <exported-key name="fk_employeeGroup_groups1" table="employeeGroup" schema="" catalog="tbwagroup_people" columns="idGroup"/>
+      <exported-key name="fk_functionGroup_groups1" table="functionGroups" schema="" catalog="tbwagroup_people" columns="idGroup"/>
+      <exported-key name="fk_groupsAccess_groups1" table="groupsAccess" schema="" catalog="tbwagroup_people" columns="idGroup"/>
+      <index name="idGroup_UNIQUE" unique="true" columns="idGroup"/>
+    </table>
+    <table name="groupsAccess" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idGa" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="idGroup" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="idSecAcc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idGa,idGroup,idSecAcc"/>
+      <foreign-key name="fk_groupsAccess_groups1" columns="idGroup" ref-table="groups" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idGroup" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_groupsAccess_securityAccess1" columns="idSecAcc" ref-table="securityAccess" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idSecAcc" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idGa_UNIQUE" unique="true" columns="idGa"/>
+      <index name="fk_groupsAccess_groups1_idx" unique="false" columns="idGroup"/>
+      <index name="fk_groupsAccess_securityAccess1_idx" unique="false" columns="idSecAcc"/>
+    </table>
+    <table name="labels" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idLab" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="labelName" sqlType="VARCHAR" precision="60" scale="0" nullable="true" jdbcType="12"/>
+      <column name="companyCode" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="hidden" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="memberOf" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="level" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idLab"/>
+      <exported-key name="fk_contracts_label1" table="contracts" schema="" catalog="tbwagroup_people" columns="idLab"/>
+      <exported-key name="fk_emailAliases_label1" table="emailAliases" schema="" catalog="tbwagroup_people" columns="idLab"/>
+      <index name="idLab_UNIQUE" unique="true" columns="idLab"/>
+    </table>
+    <table name="parking" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idPark" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contracts_idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="nrPlaat" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="comesBy" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="parkingNr" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="parking" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idPark,contracts_idCon"/>
+      <foreign-key name="parking_ibfk_1" columns="contracts_idCon" ref-table="contracts" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idCon" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idPark_UNIQUE" unique="true" columns="idPark"/>
+      <index name="fk_parking_contracts1_idx" unique="false" columns="contracts_idCon"/>
+    </table>
+    <table name="securityAccess" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idSecAcc" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="securityName" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <column name="securityDescription" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idSecAcc"/>
+      <exported-key name="fk_empAccess_securityAccess1" table="empAccess" schema="" catalog="tbwagroup_people" columns="idSecAcc"/>
+      <exported-key name="fk_groupsAccess_securityAccess1" table="groupsAccess" schema="" catalog="tbwagroup_people" columns="idSecAcc"/>
+      <index name="idsecurityAccess_UNIQUE" unique="true" columns="idSecAcc"/>
+    </table>
+    <table name="teamLeads" schema="" catalog="tbwagroup_people" type="TABLE">
+      <column name="idHA" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="contracts_idCon" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="employees_idE" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="teamLeadDelete" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="appType" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="idHA,contracts_idCon,employees_idE"/>
+      <foreign-key name="fk_teamLead_contracts1" columns="contracts_idCon" ref-table="contracts" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idCon" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="fk_teamLead_employees1" columns="employees_idE" ref-table="employees" ref-schema="" ref-catalog="tbwagroup_people" ref-columns="idE" update-rule="3" delete-rule="3" deferrability="2"/>
+      <index name="idHA_UNIQUE" unique="true" columns="idHA"/>
+      <index name="fk_teamLead_contracts1_idx" unique="false" columns="contracts_idCon"/>
+      <index name="fk_teamLead_employees1_idx" unique="false" columns="employees_idE"/>
+    </table>
+  </data-source>
+</component>

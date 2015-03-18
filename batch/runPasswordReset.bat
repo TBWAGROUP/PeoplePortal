@@ -1,0 +1,1 @@
+powershell \\TBWADC1\remoteScripts\passwordReset.ps1 %1

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3192938760">
+    <data-source source="LOCAL" name="MySQL - tbwagroup_people@10.173.0.34" read-only="true" uuid="eb79ad28-1431-48f6-ac2a-8aaba0923554">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://10.173.0.34:3306/tbwagroup_people</jdbc-url>
+      <driver-properties>
+        <property name="characterEncoding" value="utf8" />
+        <property name="yearIsDateType" value="false" />
+        <property name="tinyInt1isBit" value="false" />
+        <property name="characterSetResults" value="utf8" />
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+      </driver-properties>
+      <libraries />
+    </data-source>
+  </component>
+</project>
